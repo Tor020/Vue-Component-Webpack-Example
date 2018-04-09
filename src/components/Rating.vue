@@ -10,10 +10,9 @@
         <icon :name="star <= stars ? 'star' : 'star-o'"/>
       </li>
     </ul>
-    <span v-if="hasCounter">{{counter}}</span>
+    <span v-if="hasCounter">{{stars}} of {{maxStars}}</span>
   </div>
 </template>
-
 
 <script>
   import 'vue-awesome/icons/star'
@@ -21,26 +20,39 @@
 
   import Icon from 'vue-awesome/components/Icon'
 
-export default {
-  props: ['grade', 'maxStars', 'hasCounter'],
-  data() {
-    return {
-      stars: this.grade
-    }
-    },
-    computed:{
-      counter(){
-        return `${this.stars} of ${this.maxStars}` 
+  export default {
+    components: { Icon },
+    props: {
+      grade: {
+        type: Number,
+        required: true
+      },
+      maxStars: {
+        type: Number,
+        default: 5
+      },
+      hasCounter: {
+        type: Boolean,
+        default: true
       }
     },
-    methods:{
-      rate(star){
-      this.stars = this.stars === star ? star - 1 : star
+    data() {
+      return {
+        stars: this.grade
+      }
+    },
+    methods: {
+      rate(star) {
+        if (
+          typeof star === 'number' &&
+          star <= this.maxStars &&
+          star >= 0
+        )
+          this.stars = this.stars === star ? star - 1 : star
       }
     }
   }
 </script>
-
 <style lang="scss" scoped>
   .rating {
 
